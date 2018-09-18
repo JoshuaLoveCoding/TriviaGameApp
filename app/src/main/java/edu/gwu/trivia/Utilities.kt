@@ -84,11 +84,8 @@ object Utilities {
 //            }
 //        }
 //
-//
-//
 //        Log.e(TAG, "No image results found")
 //        return null
 //    }
-
 
 }
