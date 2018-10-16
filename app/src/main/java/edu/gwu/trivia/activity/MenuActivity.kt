@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import edu.gwu.trivia.PersistenceManager
 import edu.gwu.trivia.R
 import edu.gwu.trivia.Utilities
@@ -23,6 +25,8 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
+        setSupportActionBar(menu_toolbar)
+
         persistenceManager = PersistenceManager(this)
 
         play_button.setOnClickListener {
@@ -30,12 +34,37 @@ class MenuActivity : AppCompatActivity() {
 
             loadGameData()
         }
+
+        high_scores_button.setOnClickListener {
+            val intent = Intent(this@MenuActivity, ScoreActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        high_score_textview.text = getString(R.string.score, persistenceManager.fetchScore())
+        val highScore = persistenceManager.highScore()?.score ?: 0 //fall back on 0
+        high_score_textview.text = getString(R.string.score, highScore)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_menu, menu)
+
+        return true
+    }
+
+    fun shareButtonPressed(item: MenuItem) {
+        val sendIntent = Intent()
+
+        sendIntent.action = Intent.ACTION_SEND
+
+        val highScore = persistenceManager.highScore()?.score ?: 0 //fall back on 0
+        val shareText = getString(R.string.share_message, highScore)
+        sendIntent.putExtra(Intent.EXTRA_TEXT, shareText)
+        sendIntent.type = "text/plain"
+
+        startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.share)))
     }
 
     private fun loadGameData() {
