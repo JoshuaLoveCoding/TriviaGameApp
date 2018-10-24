@@ -5,14 +5,12 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import edu.gwu.trivia.PersistenceManager
 import edu.gwu.trivia.R
-import edu.gwu.trivia.R.id.high_score_textview
 import edu.gwu.trivia.Utilities
 import edu.gwu.trivia.activity.MenuActivity.Companion.GAME_DATA_KEY
 import kotlinx.android.synthetic.main.activity_menu.*
