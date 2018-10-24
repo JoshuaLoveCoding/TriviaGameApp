@@ -98,8 +98,4 @@ class BingImageSearchManager(private val context: Context, private val imageView
         return null
     }
 
-
-
-
-
 }

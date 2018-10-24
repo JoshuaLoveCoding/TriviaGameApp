@@ -6,6 +6,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
+
 class ShakeDetector (private val context: Context): SensorEventListener {
     private var sensorManager: SensorManager? = null
     private var accelerometer: Sensor? = null

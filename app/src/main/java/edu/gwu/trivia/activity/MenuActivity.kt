@@ -12,7 +12,6 @@ import android.view.MenuItem
 import edu.gwu.trivia.PersistenceManager
 import edu.gwu.trivia.R
 import edu.gwu.trivia.Utilities
-import edu.gwu.trivia.activity.MenuActivity.Companion.GAME_DATA_KEY
 import kotlinx.android.synthetic.main.activity_menu.*
 import org.jetbrains.anko.activityUiThread
 import org.jetbrains.anko.doAsync
