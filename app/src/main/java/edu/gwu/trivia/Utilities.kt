@@ -64,33 +64,4 @@ object Utilities {
         return GameData(questions, triviaCategory)
     }
 
-//    fun parseURLFromBingJSON(jsonObject: JsonObject, desiredOrientation: Int): URL? {
-//        //parse through JSON to obtain an image url that meets criteria: not too large, and correct orientation
-//        val imageResults = jsonObject.getAsJsonArray("value")
-//        if (imageResults != null && imageResults.size() > 0) {
-//            for (i in 0..imageResults.size() - 1) {
-//                val imageResult = imageResults.get(i).asJsonObject
-//                val tooBig = Integer.parseInt(imageResult.get("contentSize").asString.replace(" B", "")) > SyncStateContract.Constants.MAX_IMAGE_FILE_SIZE_IN_BYTES
-//
-//                if (!tooBig) {
-//                    val width = imageResult.get("width").asInt
-//                    val height = imageResult.get("height").asInt
-//
-//                    if (desiredOrientation == Configuration.ORIENTATION_PORTRAIT) {
-//                        if (height > width) {
-//                            return URL(imageResult.get("contentUrl").asString)
-//                        }
-//                    } else if (desiredOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-//                        if (width > height) {
-//                            return URL(imageResult.get("contentUrl").asString)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//        Log.e(TAG, "No image results found")
-//        return null
-//    }
-
 }
