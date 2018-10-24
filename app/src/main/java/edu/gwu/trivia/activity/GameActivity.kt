@@ -5,12 +5,10 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
-import edu.gwu.trivia.ShakeDetector
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import edu.gwu.trivia.*
-import edu.gwu.trivia.R.string.skip
 import edu.gwu.trivia.model.GameData
 import edu.gwu.trivia.model.Score
 import kotlinx.android.synthetic.main.activity_game.*
@@ -22,8 +20,8 @@ class GameActivity : AppCompatActivity(), BingImageSearchManager.ImageSearchComp
     private lateinit var gameData: GameData
     private lateinit var bingImageSearchManager: BingImageSearchManager
     private lateinit var persistenceManager: PersistenceManager
-    private lateinit var locationDetector: LocationDetector
     private lateinit var shakeDetector: ShakeDetector
+    private lateinit var locationDetector: LocationDetector
 
     private var score = 0
     private var currentQuestionIndex = 0
@@ -37,12 +35,12 @@ class GameActivity : AppCompatActivity(), BingImageSearchManager.ImageSearchComp
         setContentView(R.layout.activity_game)
 
         setSupportActionBar(game_toolbar)
+
         locationDetector = LocationDetector(this)
         locationDetector.locationListener = this
 
         shakeDetector = ShakeDetector(this)
         shakeDetector.shakeListener = this
-
 
         persistenceManager = PersistenceManager(this)
 
@@ -64,10 +62,13 @@ class GameActivity : AppCompatActivity(), BingImageSearchManager.ImageSearchComp
 
     override fun onResume() {
         super.onResume()
+
         shakeDetector.start()
     }
+
     override fun onPause() {
         super.onPause()
+
         shakeDetector.stop()
     }
 
@@ -85,8 +86,6 @@ class GameActivity : AppCompatActivity(), BingImageSearchManager.ImageSearchComp
         disableButtons()
 
         if(numWrong == 3 ) { //game over condition
-            persistenceManager.saveScore(score)
-            finish()
             locationDetector.detectLocation()
         }
         else {
@@ -100,19 +99,7 @@ class GameActivity : AppCompatActivity(), BingImageSearchManager.ImageSearchComp
 
             Log.d(TAG, "the correct answer is ${answer.answer}")
 
-
-
             bingImageSearchManager.searchImages(answer.answer)
-        }
-    }
-
-    private fun skip() {
-        if(!skipUsed) {
-            nextTurn()
-            skipUsed = true
-        }
-        else {
-            toast(R.string.skip_used)
         }
     }
 
@@ -156,6 +143,16 @@ class GameActivity : AppCompatActivity(), BingImageSearchManager.ImageSearchComp
         nextTurn()
     }
 
+    private fun skip() {
+        if(!skipUsed) {
+            nextTurn()
+            skipUsed = true
+        }
+        else {
+            toast(R.string.skip_used)
+        }
+    }
+
     override fun imageLoaded() {
         displayAnswers()
     }
@@ -171,18 +168,24 @@ class GameActivity : AppCompatActivity(), BingImageSearchManager.ImageSearchComp
     private fun gameOver(location: Location?) {
         //didn't have time, but planned to update score model to include a latitude and longitude
         val score = Score(score, Date())
+
         persistenceManager.saveScore(score)
         finish()
     }
+
     override fun locationFound(location: Location) {
         toast("${location.latitude}----${location.longitude}")
+
         gameOver(location)
     }
+
     override fun locationNotFound(reason: LocationDetector.FailureReason) {
+
         when (reason) {
             LocationDetector.FailureReason.TIMEOUT -> toast(getString(R.string.location_not_found))
             LocationDetector.FailureReason.NO_PERMISSION -> toast(getString(R.string.no_location_permission))
         }
+
         gameOver(null)
     }
 }
