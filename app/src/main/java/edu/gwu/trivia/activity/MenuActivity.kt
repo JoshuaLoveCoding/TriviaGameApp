@@ -1,17 +1,24 @@
 package edu.gwu.trivia.activity
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import edu.gwu.trivia.PersistenceManager
 import edu.gwu.trivia.R
+import edu.gwu.trivia.R.id.high_score_textview
 import edu.gwu.trivia.Utilities
+import edu.gwu.trivia.activity.MenuActivity.Companion.GAME_DATA_KEY
 import kotlinx.android.synthetic.main.activity_menu.*
 import org.jetbrains.anko.activityUiThread
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 
 class MenuActivity : AppCompatActivity() {
     private val TAG = "MenuActivity"
@@ -20,6 +27,7 @@ class MenuActivity : AppCompatActivity() {
     }
 
     private lateinit var persistenceManager: PersistenceManager
+    private val LOCATION_PERMISSION_REQUEST_CODE = 7
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +47,9 @@ class MenuActivity : AppCompatActivity() {
             val intent = Intent(this@MenuActivity, ScoreActivity::class.java)
             startActivity(intent)
         }
+
+
+        requestPermissionsIfNecessary()
     }
 
     override fun onResume() {
@@ -53,6 +64,25 @@ class MenuActivity : AppCompatActivity() {
 
         return true
     }
+
+    private fun requestPermissionsIfNecessary() {
+        val permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+        if(permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+        }
+    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if(grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
+                toast(R.string.permissions_granted)
+            }
+            else {
+                toast(R.string.permissions_denied)
+            }
+        }
+    }
+
 
     fun shareButtonPressed(item: MenuItem) {
         val sendIntent = Intent()
